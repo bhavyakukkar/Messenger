@@ -9,38 +9,102 @@
 header('Access-Control-Allow-Origin: *');
 
 $data_directory = "../../database/";
+$salt = "2761";
 
 
-function getPassword($user_id) {
+function getArrayFromJson($path) {
+
+    return json_decode(file_get_contents($path), true);
+}
+
+function setArrayToJson($array, $path) {
+
+    file_put_contents($path, json_encode($array));
+}
+
+
+function loginUser($user_id) {
+    global $data_directory, $salt;
+
+    $user_hash = hash('md5', $salt.$user_id.$salt);
+    $user_directory_name = "u-".$user_hash;
+
+    $path = $data_directory.$user_directory_name;
+    if(!file_exists($path)) {
+        mkdir($path);
+    }
+    
+    return $user_directory_name."/";
+}
+
+
+function loginContact($user_key, $contact_id) {
+    global $data_directory, $salt;
+
+    //$contact_hash = hash('md5', $salt.$user_id.$salt);
+    $contact_hash = $contact_id;
+    $contact_file_name = $contact_hash.".json";
+
+    $path = $data_directory.$user_key.$contact_file_name;
+    if(!file_exists($path)) {
+        mkdir($path);
+    }
+    
+    return $user_key.$contact_file_name;
+}
+
+
+function addMessage($contact_key, $message) {
     global $data_directory;
 
-    $path = $data_directory.$user_id."/password.json";
-    $password_json = file_get_contents($path);
-    $password = json_decode($existing_json, true)[0];
+    $path = $data_directory.$contact_key;
+    $existing_chat = getArrayFromJson($path);
+
+    $existing_chat_length = count($existing_chat);
+    $id = $existing_chat_length;
+    
+    $updated_chat = $existing_chat;
+    $updated_chat[$id] = Array (
+        "ID" => strval($id + 1),
+        "message" => $message
+    );
+    setArrayToJson($updated_chat);
 }
 
-function isMatchPassword($sender_id, $sender_password_in) {
 
-    $salt = "2761";
-    $sender_password = hash('md5', $salt.$sender_id.$salt);
+function addNotification($user_key, $contact_id) {
+    global $data_directory;
+
+    $path = $data_directory.$user_key."notifications.json";
+    $existing_notifications = getArrayFromJson($path);
+
+    $existing_notifications_length = count($existing_notifications);
+    $id = $existing_notifications_length;
+    
+    $updated_notifications = $existing_notifications;
+    $updated_notifications[$id] = Array(
+        "ID" => strval($id + 1),
+        "contact" => $contact_id
+    );
+    setArrayToJson($updated_notifications);
 }
+
 
 function sendMessage($sender_id, $receiver_id, $message) {
 
-    
+    addMessage(
+        loginContact(
+            loginUser($receiver_id),
+            $sender_id
+        ),
+        $message
+    );
+
+    addNotification(
+        loginUser($receiver_id),
+        $sender_id
+    );
 }
-
-function loginUser() {
-
-}
-
-function loginContact() {
-
-}
-
-function 
-
-
 
 
 $code = 0;
@@ -50,58 +114,25 @@ $response = "";
 //Sender Parameter
 if(!empty($_GET['me'])) {
 
-    //Sender Account Existence
-    if(isExistent($_GET['me'])) {
+    //Receiver Parameter
+    if(!empty($_GET['you'])) {
 
-        //Receiver Parameter
-        if(!empty($_GET['you'])) {
+        //Message Parameter
+        if(!empty($_GET['say'])) {
 
-            //Receiver Account Existence
-            if(isExistent($_GET['you'])) {
+            sendMessage($_GET['me'], $_GET['you'], $_GET['say']);
 
-                //Message Parameter
-                if(!empty($_GET['say'])) {
-
-                    //Sender Password
-                    if(!empty($_POST['me'])) {
-
-                        //Sender Password Match
-                        if(isMatchPassword($_GET['me'], $_POST['me'])) {
-                            
-                            sendMessage($_GET['me'], $_GET['you'], $_GET['say']);
-
-                            $code = 1;
-                            $response = "Message sent";
-                        }
-                        else {
-                            $code = 0;
-                            $response = "Receiver Authorization failed";
-                        }
-                    }
-                    else {
-                        $code = 2;
-                        $response = "Error: Receiver Password missing, message request from illegal source";
-                    }
-                    
-                }
-                else {
-                    $code = 0;
-                    $response = "Message missing. Use parameter 'say'";
-                }
-            }
-            else {
-                $code = 0;
-                $response = "Receiver Address not found";
-            }
+            $code = 1;
+            $response = "Message sent";
         }
         else {
             $code = 0;
-            $response = "Receiver Address missing. Use parameter 'you'";
+            $response = "Message missing. Use parameter 'say'";
         }
     }
     else {
         $code = 0;
-        $response = "Sender Address not found. Please register or login before sending messages";
+        $response = "Receiver Address missing. Use parameter 'you'";
     }
 }
 else {
