@@ -46,9 +46,6 @@ function loginContact($user_key, $contact_id) {
     $contact_file_name = $contact_hash.".json";
 
     $path = $data_directory.$user_key.$contact_file_name;
-    if(!file_exists($path)) {
-        mkdir($path);
-    }
     
     return $user_key.$contact_file_name;
 }
@@ -68,7 +65,7 @@ function addMessage($contact_key, $message) {
         "ID" => strval($id + 1),
         "message" => $message
     );
-    setArrayToJson($updated_chat);
+    setArrayToJson($updated_chat, $path);
 }
 
 
@@ -86,7 +83,7 @@ function addNotification($user_key, $contact_id) {
         "ID" => strval($id + 1),
         "contact" => $contact_id
     );
-    setArrayToJson($updated_notifications);
+    setArrayToJson($updated_notifications, $path);
 }
 
 
