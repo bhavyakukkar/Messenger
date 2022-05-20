@@ -119,24 +119,29 @@ if(!empty($_GET['me'])) {
 
             sendMessage($_GET['me'], $_GET['you'], $_GET['say']);
 
-            $code = 1;
+            $code = 0;
             $response = "Message sent";
         }
         else {
-            $code = 0;
+            $code = 1;
             $response = "Message missing. Use parameter 'say'";
         }
     }
     else {
-        $code = 0;
+        $code = 1;
         $response = "Receiver Address missing. Use parameter 'you'";
     }
 }
 else {
-    $code = 0;
+    $code = 1;
     $response = "Sender Address missing. Use parameter 'me'";
 }
 
+/*
+Code 0: Message Successfully Delivered
+Code 1: Parameter Error, Message not Delivered
+Code 2: Existence Error, Message not Delivered
+*/
 
 echo json_encode(array( 'code' => $code, 'response' => $response ));
 
