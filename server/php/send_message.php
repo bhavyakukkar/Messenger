@@ -8,7 +8,9 @@
 */
 header('Access-Control-Allow-Origin: *');
 
-$data_directory = "../../database/";
+$messaging_directory = "../../database/messaging/";
+$user_list_directory = "../../database/user-list.json";
+
 $salt = "2761";
 
 
@@ -23,41 +25,56 @@ function setArrayToJson($array, $path) {
 }
 
 
+function userExist($user_id) {
+    global $user_list_directory;
+
+    $user_list = getArrayFromJson($user_list_directory);
+    if(in_array($user_id, $user_list))
+        return True;
+    else
+        return False;
+}
+
+
 function loginUser($user_id) {
-    global $data_directory, $salt;
+    global $messaging_directory, $salt;
 
     $user_hash = hash('md5', $salt.$user_id.$salt);
     $user_directory_name = "u-".$user_hash;
 
-    $path = $data_directory.$user_directory_name;
-    if(!file_exists($path)) {
-        mkdir($path);
-    }
+    $path = $messaging_directory.$user_directory_name;
     
     return $user_directory_name."/";
 }
 
 
 function loginContact($user_key, $contact_id) {
-    global $data_directory, $salt;
+    global $messaging_directory, $salt;
 
     //$contact_hash = hash('md5', $salt.$user_id.$salt);
     $contact_hash = $contact_id;
     $contact_file_name = $contact_hash.".json";
 
-    $path = $data_directory.$user_key.$contact_file_name;
+    $path = $messaging_directory.$user_key."chats/".$contact_file_name;
     
     return $user_key.$contact_file_name;
 }
 
 
 function addMessage($contact_key, $message) {
-    global $data_directory;
+    global $messaging_directory;
 
-    $path = $data_directory.$contact_key;
+    $path = $messaging_directory.$contact_key;
     $existing_chat = getArrayFromJson($path);
 
-    $existing_chat_length = count($existing_chat);
+    //Scope to implement Friend Requests, right now creates chat triggered by first ever message
+    //First Message Ever
+    if(!$existing_chat)
+        $existing_chat_length = 0;
+    //Not First Message Ever
+    else
+        $existing_chat_length = count($existing_chat);
+    
     $id = $existing_chat_length;
     
     $updated_chat = $existing_chat;
@@ -70,9 +87,9 @@ function addMessage($contact_key, $message) {
 
 
 function addNotification($user_key, $contact_id) {
-    global $data_directory;
+    global $messaging_directory;
 
-    $path = $data_directory.$user_key."notifications.json";
+    $path = $messaging_directory.$user_key."notifications.json";
     $existing_notifications = getArrayFromJson($path);
 
     $existing_notifications_length = count($existing_notifications);
@@ -104,8 +121,29 @@ function sendMessage($sender_id, $receiver_id, $message) {
 }
 
 
-$code = 0;
-$response = "";
+$code = array(-1, -1);
+$response = array(
+    0 => array(
+        0 => "Message Successfully Delivered"
+    ),
+
+    1 => array(
+        0 => "Parameter Error, Message not Delivered",
+        1 => "Sender Address missing. Use parameter 'me'",
+        2 => "Receiver Address missing. Use parameter 'you'",
+        3 => "Message missing. Use parameter 'say'"
+    ),
+    2 => array(
+        0 => "Existence Error, Message not Delivered",
+        1 => "Sender Address does not exist. Please create new account",
+        2 => "Receiver Address does not exist. Please verify address"
+    ),
+
+    //Todo: Implement Authorization
+    3 => array (
+        0 => "Authorization Error, Message not Delivered"
+    )
+);
 
 
 //Sender Parameter
@@ -116,34 +154,39 @@ if(!empty($_GET['me'])) {
 
         //Message Parameter
         if(!empty($_GET['say'])) {
+            
+            //Sender Exist
+            if(userExist($_GET['me'])) {
 
-            sendMessage($_GET['me'], $_GET['you'], $_GET['say']);
+                //Receiver Exist
+                if(userExist($_GET['you'])) {
 
-            $code = 0;
-            $response = "Message sent";
+                    sendMessage($_GET['me'], $_GET['you'], $_GET['say']);
+                    $code = array(0, 0);
+                }
+                else {
+                    $code = array(2, 2);
+                }
+            }
+            else {
+                $code = array(2, 1);
+            }
         }
         else {
-            $code = 1;
-            $response = "Message missing. Use parameter 'say'";
+            $code = array(1, 3);
         }
     }
     else {
-        $code = 1;
-        $response = "Receiver Address missing. Use parameter 'you'";
+        $code = array(1, 2);
     }
 }
 else {
-    $code = 1;
-    $response = "Sender Address missing. Use parameter 'me'";
+    $code = array(1, 1);
 }
 
-/*
-Code 0: Message Successfully Delivered
-Code 1: Parameter Error, Message not Delivered
-Code 2: Existence Error, Message not Delivered
-*/
 
-echo json_encode(array( 'code' => $code, 'response' => $response ));
 
+
+echo $response[$code[0]][0]." > ".$response[$code[0]][$code[1]];
 
 ?>
