@@ -1,10 +1,12 @@
 <?php 
 /*
 
-- folder for every user
-- every user has folders for every contact who messages them
-- every user folders has notifications.json
-- notifications.json: new message is indicated true, client updates it to false as user clicks on messages
+Parameters: 
+
+me: sender id
+you: received id
+say: message
+
 
 */
 header('Access-Control-Allow-Origin: *');

@@ -1,6 +1,13 @@
 <?php 
+/*
+
+Parameters: 
+
+username
+password
 
 
+*/
 header('Access-Control-Allow-Origin: *');
 
 $messaging_directory = "../../database/messaging/";
