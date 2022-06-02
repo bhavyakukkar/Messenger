@@ -12,7 +12,7 @@ header('Access-Control-Allow-Origin: *');
 $messaging_directory = "../../database/messaging/";
 $user_list_directory = "../../database/user-list.json";
 
-$salt = "2761";
+$salt = "1940261";
 
 
 function getArrayFromJson($path) {
