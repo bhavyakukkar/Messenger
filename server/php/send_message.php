@@ -38,6 +38,19 @@ function userExist($user_id) {
         return False;
 }
 
+function passwordMatch($user_id, $key) {
+    global $salt, $messaging_directory;
+
+    $user_key = loginUser($user_id);
+    $path = $messaging_directory.$user_key."password.json";
+
+    $server_key = getArrayFromJson($path)[0];
+    if(hash('md5', $salt.$key.$salt) == $server_key)
+        return True;
+    else
+        return False;
+}
+
 
 function loginUser($user_id) {
     global $messaging_directory, $salt;
@@ -160,12 +173,14 @@ $response = array(
         0 => "Parameter Error, Message not Delivered",
         1 => "Sender Address missing. Use parameter 'me'",
         2 => "Receiver Address missing. Use parameter 'you'",
-        3 => "Message missing. Use parameter 'say'"
+        3 => "Message missing. Use parameter 'say'",
+        4 => "Sender Password Key missing. Retry sending message"
     ),
     2 => array(
         0 => "Existence Error, Message not Delivered",
         1 => "Sender Address does not exist. Please create new account",
-        2 => "Receiver Address does not exist. Please verify address"
+        2 => "Receiver Address does not exist. Please verify address",
+        3 => "Sender Password Key does not match. Please authorize yourself"
     ),
 
     //Todo: Implement Authorization
@@ -184,21 +199,35 @@ if(!empty($_GET['me'])) {
         //Message Parameter
         if(!empty($_GET['say'])) {
             
-            //Sender Exist
-            if(userExist($_GET['me'])) {
+            //Sender Password Key Parameter
+            if(!empty($_GET['key'])) {
 
-                //Receiver Exist
-                if(userExist($_GET['you'])) {
+                //Sender Exist
+                if(userExist($_GET['me'])) {
 
-                    sendMessage($_GET['me'], $_GET['you'], $_GET['say']);
-                    $code = array(0, 1);
+                    //Receiver Exist
+                    if(userExist($_GET['you'])) {
+
+                        //Sender Password Key Match
+                        if(passwordMatch($_GET['me'], $_GET['key'])) {
+                            
+                            sendMessage($_GET['me'], $_GET['you'], $_GET['say']);
+                            $code = array(0, 1);
+                        }
+                        else {
+                            $code = array(2, 3);
+                        }
+                    }
+                    else {
+                        $code = array(2, 2);
+                    }
                 }
                 else {
-                    $code = array(2, 2);
+                    $code = array(2, 1);
                 }
             }
             else {
-                $code = array(2, 1);
+                $code = array(1, 4);
             }
         }
         else {
