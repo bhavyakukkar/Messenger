@@ -6,7 +6,7 @@ header('Access-Control-Allow-Origin: *');
 $messaging_directory = "../../database/messaging/";
 $user_list_directory = "../../database/user-list.json";
 
-$salt = "2761";
+$salt = "1940261";
 
 
 function getArrayFromJson($path) {
@@ -29,21 +29,33 @@ function userExist($user_id) {
         return False;
 }
 
+function hashPassword($password) {
+    global $salt;
+
+    return hash('md5', $salt.$password.$salt);
+}
 
 
-function createUser($user_id) {
+
+function createUser($user_id, $password) {
     global $messaging_directory;
 
+    //Make user directory
     $path = $messaging_directory.$user_id;
     mkdir($path);
 
+    //Make Password File
+    $path = $messaging_directory.$user_id."/password.json";
+    setArrayToJson(array(hashPassword($password)), $path);
+
+    //Make Notifications File
     $path = $messaging_directory.$user_id."/notifications.json";
     setArrayToJson(array(), $path);
 
+    //Make Chats Directory
     $path = $messaging_directory.$user_id."/chats";
     mkdir($path);
 }
-
 
 function addUserToUserList($user_id) {
     global $user_list_directory;
@@ -66,7 +78,8 @@ $response = array(
 
     1 => array(
         0 => "Parameter Error, User not Created",
-        1 => "Username missing. Use parameter 'username'"
+        1 => "Username missing. Use parameter 'username'",
+        2 => "Password missing. Use parameter 'password'"
     ),
     2 => array(
         0 => "Existence Error, User not Created",
@@ -83,16 +96,23 @@ $response = array(
 //Username Parameter
 if(!empty($_GET['username'])) {
 
-    //Username doesn't already exist
-    if(!userExist($_GET['username'])) {
+    //Password Parameter
+    if(!empty($_GET['password'])) {
 
-        createUser($_GET['username']);
-        addUserToUserList($_GET['username']);
-        $code = array(0, 1);
+        //Username doesn't already exist
+        if(!userExist($_GET['username'])) {
+
+            createUser($_GET['username'], $_GET['password']);
+            addUserToUserList($_GET['username']);
+            $code = array(0, 1);
+        }
+        else {
+            $code = array(2, 1);
+        }
     }
     else {
-        $code = array(2, 1);
-    }
+        $code = array(1, 2);
+    }    
 }
 else {
     $code = array(1, 1);
