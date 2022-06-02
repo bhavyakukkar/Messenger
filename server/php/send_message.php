@@ -150,7 +150,8 @@ function sendMessage($sender_id, $receiver_id, $message) {
 $code = array(-1, -1);
 $response = array(
     0 => array(
-        0 => "Message Successfully Delivered"
+        0 => "Message Successfully Delivered",
+        1 => "No problems occured."
     ),
 
     1 => array(
@@ -188,7 +189,7 @@ if(!empty($_GET['me'])) {
                 if(userExist($_GET['you'])) {
 
                     sendMessage($_GET['me'], $_GET['you'], $_GET['say']);
-                    $code = array(0, 0);
+                    $code = array(0, 1);
                 }
                 else {
                     $code = array(2, 2);
