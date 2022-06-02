@@ -39,8 +39,10 @@ function userExist($user_id) {
 function loginUser($user_id) {
     global $messaging_directory, $salt;
 
-    $user_hash = hash('md5', $salt.$user_id.$salt);
-    $user_directory_name = "u-".$user_hash;
+    $user_hash = $user_id;
+    //$user_hash = hash('md5', $salt.$user_id.$salt);
+
+    $user_directory_name = $user_hash;
 
     $path = $messaging_directory.$user_directory_name;
     
@@ -56,8 +58,17 @@ function loginContact($user_key, $contact_id) {
     $contact_file_name = $contact_hash.".json";
 
     $path = $messaging_directory.$user_key."chats/".$contact_file_name;
+
+    //Scope to implement Friend Requests, right now creates chat triggered by first ever message
+    //First Interaction Ever
+    if(!file_exists($path)) {
+
+        $fp = fopen($path, 'w');
+        fwrite($fp, json_encode(array()));
+        fclose($fp);
+    }
     
-    return $user_key.$contact_file_name;
+    return $user_key."chats/".$contact_file_name;
 }
 
 
@@ -69,11 +80,12 @@ function addMessage($contact_key, $message) {
 
     //Scope to implement Friend Requests, right now creates chat triggered by first ever message
     //First Message Ever
-    if(!$existing_chat)
+    /*if(!$existing_chat)
         $existing_chat_length = 0;
     //Not First Message Ever
     else
-        $existing_chat_length = count($existing_chat);
+        $existing_chat_length = count($existing_chat);*/
+    $existing_chat_length = count($existing_chat);
     
     $id = $existing_chat_length;
     
@@ -91,16 +103,29 @@ function addNotification($user_key, $contact_id) {
 
     $path = $messaging_directory.$user_key."notifications.json";
     $existing_notifications = getArrayFromJson($path);
-
     $existing_notifications_length = count($existing_notifications);
-    $id = $existing_notifications_length;
+
+    if(newNotification($existing_notifications, $contact_id)) {
+
+        $id = $existing_notifications_length;
     
-    $updated_notifications = $existing_notifications;
-    $updated_notifications[$id] = Array(
-        "ID" => strval($id + 1),
-        "contact" => $contact_id
-    );
-    setArrayToJson($updated_notifications, $path);
+        $updated_notifications = $existing_notifications;
+        $updated_notifications[$id] = Array(
+            "ID" => strval($id + 1),
+            "contact_id" => $contact_id
+        );
+        setArrayToJson($updated_notifications, $path);
+    }
+}
+
+
+//Check if Notification already there
+function newNotification($notifications, $contact_id) {
+    for($i = 0; $i < count($notifications); $i++) {
+        if($notifications[$i]["contact_id"] == $contact_id)
+            return False;
+    }
+    return True;
 }
 
 
