@@ -3,7 +3,8 @@
 
 - folder for every user
 - every user has folders for every contact who messages them
-- each of these folders has a portal.json, where received message is indicated by portal['new'] - true, and user client updates it to false once user clicks on messages
+- every user folders has notifications.json
+- notifications.json: new message is indicated true, client updates it to false as user clicks on messages
 
 */
 header('Access-Control-Allow-Origin: *');
