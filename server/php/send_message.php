@@ -174,7 +174,7 @@ $code = array(-1, -1);
 $response = array(
     0 => array(
         0 => "Message Successfully Delivered",
-        1 => "No problems occured."
+        1 => "No problems occured"
     ),
 
     1 => array(
