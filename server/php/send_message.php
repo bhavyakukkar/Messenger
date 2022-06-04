@@ -3,9 +3,9 @@
 
 Parameters: 
 
-me: sender id
-you: received id
-say: message
+from: sender id
+to: receiver id
+message
 
 
 */
@@ -179,9 +179,9 @@ $response = array(
 
     1 => array(
         0 => "Parameter Error, Message not Delivered",
-        1 => "Sender Address missing. Use parameter 'me'",
-        2 => "Receiver Address missing. Use parameter 'you'",
-        3 => "Message missing. Use parameter 'say'",
+        1 => "Sender Address missing. Use parameter 'from'",
+        2 => "Receiver Address missing. Use parameter 'to'",
+        3 => "Message missing. Use parameter 'message'",
         4 => "Sender Password Key missing. Retry sending message"
     ),
     2 => array(
@@ -199,27 +199,27 @@ $response = array(
 
 
 //Sender Parameter
-if(!empty($_GET['me'])) {
+if(!empty($_GET['from'])) {
 
     //Receiver Parameter
-    if(!empty($_GET['you'])) {
+    if(!empty($_GET['to'])) {
 
         //Message Parameter
-        if(!empty($_GET['say'])) {
+        if(!empty($_GET['message'])) {
             
             //Sender Password Key Parameter
             if(!empty($_GET['key'])) {
 
                 //Sender Exist
-                if(userExist($_GET['me'])) {
+                if(userExist($_GET['from'])) {
 
                     //Receiver Exist
-                    if(userExist($_GET['you'])) {
+                    if(userExist($_GET['to'])) {
 
                         //Sender Password Key Match
-                        if(passwordMatch($_GET['me'], $_GET['key'])) {
+                        if(passwordMatch($_GET['from'], $_GET['key'])) {
                             
-                            sendMessage($_GET['me'], $_GET['you'], $_GET['say']);
+                            sendMessage($_GET['from'], $_GET['to'], $_GET['message']);
                             $code = array(0, 1);
                         }
                         else {
