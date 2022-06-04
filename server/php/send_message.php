@@ -189,11 +189,6 @@ $response = array(
         1 => "Sender Address does not exist. Please create new account",
         2 => "Receiver Address does not exist. Please verify address",
         3 => "Sender Password Key does not match. Please authorize yourself"
-    ),
-
-    //Todo: Implement Authorization
-    3 => array (
-        0 => "Authorization Error, Message not Delivered"
     )
 );
 
