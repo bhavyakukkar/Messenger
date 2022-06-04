@@ -11,6 +11,7 @@ say: message
 */
 header('Access-Control-Allow-Origin: *');
 
+//Global Addresses
 $messaging_directory = "../../database/messaging/";
 $user_list_directory = "../../database/user-list.json";
 
@@ -66,6 +67,18 @@ function loginUser($user_id) {
 }
 
 
+function addContactToContactsList($user_key, $contact_id) {
+    global $messaging_directory;
+
+    $path = $messaging_directory.$user_key."contacts.json";
+
+    $contacts_list = getArrayFromJson($path);
+    array_push($contacts_list, $contact_id);
+
+    setArrayToJson($contacts_list, $path);
+}
+
+
 function loginContact($user_key, $contact_id) {
     global $messaging_directory, $salt;
 
@@ -82,6 +95,8 @@ function loginContact($user_key, $contact_id) {
         $fp = fopen($path, 'w');
         fwrite($fp, json_encode(array()));
         fclose($fp);
+
+        addContactToContactsList($user_key, $contact_id);
     }
     
     return $user_key."chats/".$contact_file_name;
@@ -94,13 +109,6 @@ function addMessage($contact_key, $message) {
     $path = $messaging_directory.$contact_key;
     $existing_chat = getArrayFromJson($path);
 
-    //Scope to implement Friend Requests, right now creates chat triggered by first ever message
-    //First Message Ever
-    /*if(!$existing_chat)
-        $existing_chat_length = 0;
-    //Not First Message Ever
-    else
-        $existing_chat_length = count($existing_chat);*/
     $existing_chat_length = count($existing_chat);
     
     $id = $existing_chat_length;

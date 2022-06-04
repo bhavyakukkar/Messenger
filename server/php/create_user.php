@@ -10,6 +10,7 @@ password
 */
 header('Access-Control-Allow-Origin: *');
 
+//Global Addresses
 $messaging_directory = "../../database/messaging/";
 $user_list_directory = "../../database/user-list.json";
 
@@ -55,8 +56,12 @@ function createUser($user_id, $password) {
     $path = $messaging_directory.$user_id."/password.json";
     setArrayToJson(array(hashPassword(hashPassword($password))), $path);
 
-    //Make Notifications File
+    //Make Notifications File (empty)
     $path = $messaging_directory.$user_id."/notifications.json";
+    setArrayToJson(array(), $path);
+
+    //Make Contact-List File (empty)
+    $path = $messaging_directory.$user_id."/contacts.json";
     setArrayToJson(array(), $path);
 
     //Make Chats Directory
