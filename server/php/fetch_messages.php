@@ -9,6 +9,14 @@ key: requestee password
 
 
 */
+/*
+
+Comments:
+
+If ability to 'archive messages' is added, this file must be modified.
+
+
+*/
 header('Access-Control-Allow-Origin: *');
 
 //Global Addresses
@@ -33,6 +41,33 @@ function userExist($user_id) {
 
     $user_list = getArrayFromJson($user_list_directory);
     if(in_array($user_id, $user_list))
+        return True;
+    else
+        return False;
+}
+
+function passwordMatch($user_id, $key) {
+    global $salt, $messaging_directory;
+
+    $user_key = loginUser($user_id);
+    $path = $messaging_directory.$user_key."password.json";
+
+    $server_key = getArrayFromJson($path)[0];
+    if(hash('md5', $salt.$key.$salt) == $server_key)
+        return True;
+    else
+        return False;
+}
+
+
+function contactInRequesteesContactList($requestee_id, $contact_id) {
+    global $messaging_directory;
+
+    $requestee_key = loginUser($requestee_id);
+    $path = $messaging_directory.$requestee_key."contacts.json";
+
+    $requestee_contacts = getArrayFromJson($path);
+    if(in_array($contact_id, $requestee_contacts))
         return True;
     else
         return False;
@@ -74,11 +109,32 @@ function loginContact($user_key, $contact_id) {
 }
 
 
+function fetchMessages($requestee_id, $contact_id) {
+    global $messaging_directory;
+
+    $requestee_key = loginUser($requestee_id);
+    $path = $messaging_directory.$requestee_key."chats/".$contact_id.".json";
+    $messages = getArrayFromJson($path);
+
+    outputMessages($messages);
+}
+
+function outputMessages($messages) {
+
+    echo "<table>";
+    for($i = 0; $i < count($messages); $i++) {
+        echo "<tr><td>".$messages[$i]["ID"]."</td><td>".$messages[$i]["message"]."</td></tr>";
+    }
+    echo "</table>";
+}
+
+
 $code = array(-1, -1);
 $response = array(
     0 => array(
         0 => "Messages successfully Retrieved",
-        1 => "No problems occured"
+        1 => "No problems occured",
+        2 => "Warning: Requestee and Contact have never "
     ),
 
     1 => array(
@@ -91,15 +147,10 @@ $response = array(
         0 => "Existence Error, Messages not Retrieved",
         1 => "Requestee Address does not exist. Please create new account",
         2 => "Contact Address does not exist. Please verify address",
-        3 => "Password Key does not match. Please authorize yourself"
+        3 => "Contact Address not in Requestee's Contact List. Please verify addresses",
+        4 => "Password Key does not match. Please authorize yourself"
     )
 );
-
-
-function fetchMessages() {
-    
-    $contact_list = 
-}
 
 
 //Requestee Parameter
@@ -117,15 +168,22 @@ if(!empty($_GET['for'])) {
                 //Contact Exist
                 if(userExist($_GET['between'])) {
 
-                    //Requestee Password Key Match
-                    if(passwordMatch($_GET['for'], $_GET['key'])) {
+                    //Contact in Requestee's Contacts List
+                    if(contactInRequesteesContactList($_GET['for'], $_GET['between'])) {
 
-                        fetchMessages($_GET['for'], $_GET['between'], $_GET['key']);
-                        $code = array(0, 1);
+                        //Requestee Password Key Match
+                        if(passwordMatch($_GET['for'], $_GET['key'])) {
+
+                            fetchMessages($_GET['for'], $_GET['between'], $_GET['key']);
+                            $code = array(0, 1);
+                        }
+                        else {
+                            $code = array(2, 4);
+                        }
                     }
                     else {
                         $code = array(2, 3);
-                    }
+                    }                    
                 }
                 else {
                     $code = array(2, 2);
