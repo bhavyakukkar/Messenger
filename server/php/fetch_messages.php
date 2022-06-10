@@ -13,7 +13,8 @@ key: requestee password
 
 Comments:
 
-If ability to 'archive messages' is added, this file must be modified.
+- If ability to 'archive messages' is added, this file must be modified.
+- 
 
 
 */
@@ -26,6 +27,8 @@ $user_list_directory = "../../database/user-list.json";
 $salt = "1940261";
 
 
+
+//Getter and Setters for Database Access
 function getArrayFromJson($path) {
 
     return json_decode(file_get_contents($path), true);
@@ -36,6 +39,37 @@ function setArrayToJson($array, $path) {
     file_put_contents($path, json_encode($array));
 }
 
+
+
+//Login Tools
+function loginUser($user_id) {
+    global $messaging_directory, $salt;
+
+    $user_hash = $user_id;
+    //$user_hash = hash('md5', $salt.$user_id.$salt);
+
+    $user_directory_name = $user_hash;
+
+    $path = $messaging_directory.$user_directory_name;
+    
+    return $user_directory_name."/";
+}
+
+function loginContact($user_key, $contact_id) {
+    global $messaging_directory, $salt;
+
+    //$contact_hash = hash('md5', $salt.$user_id.$salt);
+    $contact_hash = $contact_id;
+    $contact_file_name = $contact_hash.".json";
+
+    $path = $messaging_directory.$user_key."chats/".$contact_file_name;
+    
+    return $user_key."chats/".$contact_file_name;
+}
+
+
+
+//User-Specific Tools
 function userExist($user_id) {
     global $user_list_directory;
 
@@ -60,6 +94,8 @@ function passwordMatch($user_id, $key) {
 }
 
 
+
+//Script-specific Tools
 function contactInRequesteesContactList($requestee_id, $contact_id) {
     global $messaging_directory;
 
@@ -73,52 +109,6 @@ function contactInRequesteesContactList($requestee_id, $contact_id) {
         return False;
 }
 
-
-function loginUser($user_id) {
-    global $messaging_directory, $salt;
-
-    $user_hash = $user_id;
-    //$user_hash = hash('md5', $salt.$user_id.$salt);
-
-    $user_directory_name = $user_hash;
-
-    $path = $messaging_directory.$user_directory_name;
-    
-    return $user_directory_name."/";
-}
-
-function loginContact($user_key, $contact_id) {
-    global $messaging_directory, $salt;
-
-    //$contact_hash = hash('md5', $salt.$user_id.$salt);
-    $contact_hash = $contact_id;
-    $contact_file_name = $contact_hash.".json";
-
-    $path = $messaging_directory.$user_key."chats/".$contact_file_name;
-
-    //Scope to implement Friend Requests, right now creates chat triggered by first ever message
-    //First Interaction Ever
-    if(!file_exists($path)) {
-
-        $fp = fopen($path, 'w');
-        fwrite($fp, json_encode(array()));
-        fclose($fp);
-    }
-    
-    return $user_key."chats/".$contact_file_name;
-}
-
-
-function fetchMessages($requestee_id, $contact_id) {
-    global $messaging_directory;
-
-    $requestee_key = loginUser($requestee_id);
-    $path = $messaging_directory.$requestee_key."chats/".$contact_id.".json";
-    $messages = getArrayFromJson($path);
-
-    outputMessages($messages);
-}
-
 function outputMessages($messages) {
 
     echo "<table>";
@@ -129,6 +119,24 @@ function outputMessages($messages) {
 }
 
 
+
+//Main Method
+function fetchMessages($requestee_id, $contact_id) {
+    global $messaging_directory;
+
+    $contact_key = loginContact(
+        loginUser($requestee_id),
+        $contact_id
+    );
+    $path = $messaging_directory.$contact_key;
+    $messages = getArrayFromJson($path);
+
+    outputMessages($messages);
+}
+
+
+
+//Status Handling
 $code = array(-1, -1);
 $response = array(
     0 => array(
@@ -204,7 +212,6 @@ if(!empty($_GET['for'])) {
 else {
     $code = array(1, 1);
 }
-
 
 
 echo $response[$code[0]][0]." > ".$response[$code[0]][$code[1]];

@@ -9,6 +9,14 @@ message
 
 
 */
+/*
+
+Comments:
+
+- 
+
+
+*/
 header('Access-Control-Allow-Origin: *');
 
 //Global Addresses
@@ -18,6 +26,8 @@ $user_list_directory = "../../database/user-list.json";
 $salt = "1940261";
 
 
+
+//Getter and Setters for Database Access
 function getArrayFromJson($path) {
 
     return json_decode(file_get_contents($path), true);
@@ -29,30 +39,8 @@ function setArrayToJson($array, $path) {
 }
 
 
-function userExist($user_id) {
-    global $user_list_directory;
 
-    $user_list = getArrayFromJson($user_list_directory);
-    if(in_array($user_id, $user_list))
-        return True;
-    else
-        return False;
-}
-
-function passwordMatch($user_id, $key) {
-    global $salt, $messaging_directory;
-
-    $user_key = loginUser($user_id);
-    $path = $messaging_directory.$user_key."password.json";
-
-    $server_key = getArrayFromJson($path)[0];
-    if(hash('md5', $salt.$key.$salt) == $server_key)
-        return True;
-    else
-        return False;
-}
-
-
+//Login Tools
 function loginUser($user_id) {
     global $messaging_directory, $salt;
 
@@ -65,19 +53,6 @@ function loginUser($user_id) {
     
     return $user_directory_name."/";
 }
-
-
-function addContactToContactsList($user_key, $contact_id) {
-    global $messaging_directory;
-
-    $path = $messaging_directory.$user_key."contacts.json";
-
-    $contacts_list = getArrayFromJson($path);
-    array_push($contacts_list, $contact_id);
-
-    setArrayToJson($contacts_list, $path);
-}
-
 
 function loginContact($user_key, $contact_id) {
     global $messaging_directory, $salt;
@@ -103,6 +78,45 @@ function loginContact($user_key, $contact_id) {
 }
 
 
+
+//User-Specific Tools
+function userExist($user_id) {
+    global $user_list_directory;
+
+    $user_list = getArrayFromJson($user_list_directory);
+    if(in_array($user_id, $user_list))
+        return True;
+    else
+        return False;
+}
+
+function passwordMatch($user_id, $key) {
+    global $salt, $messaging_directory;
+
+    $user_key = loginUser($user_id);
+    $path = $messaging_directory.$user_key."password.json";
+
+    $server_key = getArrayFromJson($path)[0];
+    if(hash('md5', $salt.$key.$salt) == $server_key)
+        return True;
+    else
+        return False;
+}
+
+
+
+//Script-specific Tools
+function addContactToContactsList($user_key, $contact_id) {
+    global $messaging_directory;
+
+    $path = $messaging_directory.$user_key."contacts.json";
+
+    $contacts_list = getArrayFromJson($path);
+    array_push($contacts_list, $contact_id);
+
+    setArrayToJson($contacts_list, $path);
+}
+
 function addMessage($contact_key, $message) {
     global $messaging_directory;
 
@@ -121,7 +135,6 @@ function addMessage($contact_key, $message) {
     setArrayToJson($updated_chat, $path);
 }
 
-
 function addNotification($user_key, $contact_id) {
     global $messaging_directory;
 
@@ -129,7 +142,7 @@ function addNotification($user_key, $contact_id) {
     $existing_notifications = getArrayFromJson($path);
     $existing_notifications_length = count($existing_notifications);
 
-    if(newNotification($existing_notifications, $contact_id)) {
+    if(isNewNotification($existing_notifications, $contact_id)) {
 
         $id = $existing_notifications_length;
     
@@ -142,9 +155,7 @@ function addNotification($user_key, $contact_id) {
     }
 }
 
-
-//Check if Notification already there
-function newNotification($notifications, $contact_id) {
+function isNewNotification($notifications, $contact_id) {
     for($i = 0; $i < count($notifications); $i++) {
         if($notifications[$i]["contact_id"] == $contact_id)
             return False;
@@ -153,6 +164,8 @@ function newNotification($notifications, $contact_id) {
 }
 
 
+
+//Main Method
 function sendMessage($sender_id, $receiver_id, $message) {
 
     addMessage(
@@ -170,6 +183,8 @@ function sendMessage($sender_id, $receiver_id, $message) {
 }
 
 
+
+//Status Handling
 $code = array(-1, -1);
 $response = array(
     0 => array(
@@ -246,7 +261,7 @@ else {
 }
 
 
-
 echo $response[$code[0]][0]." > ".$response[$code[0]][$code[1]];
+
 
 ?>

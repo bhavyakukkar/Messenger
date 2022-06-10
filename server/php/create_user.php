@@ -8,6 +8,14 @@ password
 
 
 */
+/*
+
+Comments:
+
+- 
+
+
+*/
 header('Access-Control-Allow-Origin: *');
 
 //Global Addresses
@@ -17,6 +25,8 @@ $user_list_directory = "../../database/user-list.json";
 $salt = "1940261";
 
 
+
+//Getter and Setters for Database Access
 function getArrayFromJson($path) {
 
     return json_decode(file_get_contents($path), true);
@@ -27,6 +37,9 @@ function setArrayToJson($array, $path) {
     file_put_contents($path, json_encode($array));
 }
 
+
+
+//User-Specific Tools
 function userExist($user_id) {
     global $user_list_directory;
 
@@ -37,14 +50,27 @@ function userExist($user_id) {
         return False;
 }
 
+
+
+//Script-specific Tools
 function hashPassword($password) {
     global $salt;
 
     return hash('md5', $salt.$password.$salt);
 }
 
+function addUserToUserList($user_id) {
+    global $user_list_directory;
+
+    $user_list = getArrayFromJson($user_list_directory);
+    array_push($user_list, $user_id);
+
+    setArrayToJson($user_list, $user_list_directory);
+}
 
 
+
+//Main Method
 function createUser($user_id, $password) {
     global $messaging_directory;
 
@@ -69,18 +95,9 @@ function createUser($user_id, $password) {
     mkdir($path);
 }
 
-function addUserToUserList($user_id) {
-    global $user_list_directory;
-
-    $user_list = getArrayFromJson($user_list_directory);
-    array_push($user_list, $user_id);
-
-    setArrayToJson($user_list, $user_list_directory);
-}
 
 
-
-
+//Status Handling
 $code = array(-1, -1);
 $response = array(
     0 => array(
