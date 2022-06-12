@@ -1,0 +1,20 @@
+{
+    "manifest_version": 3,
+  
+    "name": "Messenger",
+    "description": "This extension is a standalone messenging app",
+    "version": "0.1.0",
+  
+    "action": {
+      "default_popup": "html/popup.html"
+    },
+    "host_permissions": [
+      "https://ghost-in-the-heap.000webhostapp.com/"
+    ],
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["js/popup.js"]
+      }
+    ]
+  }
