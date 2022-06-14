@@ -111,14 +111,13 @@ function contactInRequesteesContactList($requestee_id, $contact_id) {
 
 function outputMessages($messages) {
 
-    echo "<table id='messages'>";
+    echo "<div id='messages'>";
     for($i = 0; $i < count($messages); $i++) {
-        echo "<tr>";
-        echo "<td class='id'>".$messages[$i]["ID"]."</td>";
-        echo "<td class='message'>".$messages[$i]["message"]."</td>";
-        echo "</tr>";
+        echo '<div class="message">';
+        echo '<p class="message left">'.$messages[$i]["message"].'</p>';
+        echo '</div>';
     }
-    echo "</table>";
+    echo "</div>";
 }
 
 
