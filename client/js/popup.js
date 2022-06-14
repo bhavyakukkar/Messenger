@@ -4,18 +4,20 @@ var contact = "bhavya";
 
 function init() {
     //updateContacts();
-    updateMessages();
+    setInterval(function() {
+        retrieveMessages();
+    }, 500);
 }
 
-function updateMessages() {
+function retrieveMessages() {
 
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var parser = new DOMParser();
-            var responseDoc = parser.parseFromString(this.responseText, "text/html");
+            var responseDom = parser.parseFromString(this.responseText, "text/html");
 
-            console.log(responseDoc);
+            updateMessages(responseDom.getElementById('messages'));
         }
     };
 
@@ -26,10 +28,14 @@ function updateMessages() {
 }
 
 
-if (document.readyState !== 'loading') {
-    init();
-} else {
-    document.addEventListener('DOMContentLoaded', function() {
-        init();
-    });
+function updateMessages(retrievedMessages) {
+    
+    var messages = document.getElementById('messages');
+    var chat = document.getElementById('chat');
+
+    chat.removeChild(messages);
+    chat.insertBefore(retrievedMessages, document.getElementById("new-message"));
 }
+
+
+init();

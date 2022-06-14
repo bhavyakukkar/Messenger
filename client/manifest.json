@@ -10,11 +10,5 @@
     },
     "host_permissions": [
       "https://ghost-in-the-heap.000webhostapp.com/"
-    ],
-    "content_scripts": [
-      {
-        "matches": ["<all_urls>"],
-        "js": ["js/popup.js"]
-      }
     ]
   }

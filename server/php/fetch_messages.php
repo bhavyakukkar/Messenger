@@ -114,13 +114,22 @@ function outputMessages($messages) {
     echo "<div id='messages'>";
     for($i = 0; $i < count($messages); $i++) {
         
+        $message = $messages[$i]["m"];
+
+        $epoch = (int)$messages[$i]["t"]+19800;
+        $time = (new DateTime("@$epoch"))->format('g:i a');
+        $date = (new DateTime("@$epoch"))->format('d/m/y');
+
         if($messages[$i]["d"] == "in")
             $direction = "left";
         elseif($messages[$i]["d"] == "out")
             $direction = "right";
         
-        echo '<div class="message">';
-        echo '<p class="message '.$direction.'">'.$messages[$i]["m"].'</p>';
+        echo '<div class="message-wrapper '.$direction.'">';
+
+        echo '<div class="message"><p class="message '.$direction.'">'.$message.'</p></div>';
+        echo '<span class="time '.$direction.'">'.$date.'<br>'.$time.'</span>';
+
         echo '</div>';
     }
     echo "</div>";
