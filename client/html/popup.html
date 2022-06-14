@@ -1,190 +1,22 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <link rel="stylesheet" href="../css/popup.css">
+    </head>
     <body>
         <div id="main">
-            <style scoped>
-                body {
-                    background: rgb(30, 30, 30);
-                    width: 310px;
-                    height: 310px;
-                    margin: 0px;
-                }
-                #main {
-                    width: 300px;
-                    height: 300px;
-                    border: solid 1px black;
-                    margin: 5px;
-                    float: right;
-                    background: white;
-                }
-
-                #contacts {
-                    width: 60px;
-                    height: 270px;
-                    float: left;
-                    border: solid 1px black;
-                    margin: 10px 2px 2px 10px;
-
-                    text-align: center;
-                    font-size: 11px;
-                }
-                #chat {
-                    width: 205px;
-                    height: 270px;
-                    float: right;
-                    border: solid 1px black;
-                    margin: 10px 10px 2px 2px;
-                }
-
-                div#contacts-list {
-                    text-align: center;
-                    height: 270px;
-                    overflow: hidden;
-                    overflow-y: scroll;
-                }
-                div.contact {
-                    display: block;
-                    margin: 10%;
-                    padding: 0px;
-                    width: 80%;
-                    height: 30px;
-                    border: solid 0.5px black;
-                    text-align: center; 
-                }
-
-                div#contact-name {
-                    border-bottom: 0.5px solid black;
-                    margin: 0px;
-                    text-align: center;
-                }
-
-                div#messages {
-                    padding: 5px 3px;
-                    height: 206px;
-                    overflow: hidden;
-                    overflow-y: scroll;
-                }
-
-                div#new-message {
-                    padding: 7px 3px;
-                    border-top: solid 0.5px black;
-                }
-
-                div.message-wrapper {
-                    padding: 7px 3px;
-                    display: flex;
-                    justify-content: flex-start;
-                    flex-direction: row;
-                    align-self: flex-end;
-                }
-                div.message {
-                    display: inline-flex;
-                }
-                div.right {
-                    flex-direction: row-reverse;
-                }
-                p.message {
-                    max-width: 140px;
-                    min-height: 20px;
-                    padding: 1px 5px;
-                    border-radius: 2px;
-                    border: solid black 0.5px;
-                    margin: 0px;
-                    font-size: 14px;
-                }
-                p.left {
-                    align-self: flex-start;
-                    border-left: solid 4px #979797;
-                }
-                div.message-wrapper:hover p.left {
-                    border-left: solid 4px #6F6F6F;
-                }
-                p.right {
-                    align-self: flex-end;
-                    border-right: solid 4px #979797;
-                }
-                div.message-wrapper:hover p.right {
-                    border-right: solid 4px #6F6F6F;
-                }
-                
-                span.time {
-                    visibility: hidden;
-                    color: rgb(75, 75, 75);
-                    font-size: 9px;
-                }
-                div.message-wrapper:hover span.time {
-                    visibility: visible;
-                }
-                span.left {
-                    padding: 2px 0px 0px 4px;
-                    text-align: left;
-                }
-                span.right {
-                    padding: 2px 4px 0px 0px;
-                    text-align: right;
-                }
-
-                ::-webkit-scrollbar { width: 7px;}
-                ::-webkit-scrollbar-track { background: #f1f1f1; }
-                ::-webkit-scrollbar-thumb { background: #888; }
-                ::-webkit-scrollbar-thumb:hover { background: #555; }
-            </style>
-    
             <div id="contacts">
                 <div id="contacts-list">
-                    <div class="contact">HSG</div>
-                    <div class="contact">Pranav</div>
-                    <div class="contact">Ronald</div>
-                    <div class="contact">Barath</div>
-                    <div class="contact">Ayush</div>
-                    <div class="contact">Suvir</div>
-                    <div class="contact">Adarsh</div>
-                    <div class="contact">Rithik</div>
-                    <div class="contact">Finn</div>
-                    <div class="contact">Mia</div>
-                    <div class="contact">Brandon</div>
+                    <!-- CONTACTS FILL UP HERE -->
                 </div>
             </div>
 
             <div id="chat">
-                <div id="contact-name">HSG</div>
+                <div id="contact-name">
+                    <!-- SELECTED CONTACT NAME GOES HERE -->
+                </div>
                 <div id="messages">
-                    <div class="message-wrapper left">
-                        <div class="message">
-                            <p class="message left">Hey</p>
-                        </div>
-                        <span class="time left">
-                            08:41<br>
-                            14/06/22
-                        </span>
-                    </div>
-                    <div class="message-wrapper right">
-                        <div class="message">
-                            <p class="message right">Hello</p>
-                        </div>
-                        <span class="time right">
-                            08:41<br>
-                            14/06/22
-                        </span>
-                    </div>
-                    <div class="message-wrapper left">
-                        <div class="message">
-                            <p class="message left">How are you?</p>
-                        </div>
-                        <span class="time left">
-                            08:41<br>
-                            14/06/22
-                        </span>
-                    </div>
-                    <div class="message-wrapper right">
-                        <div class="message">
-                            <p class="message right">It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing</p>
-                        </div>
-                        <span class="time right">
-                            08:41<br>
-                            14/06/22
-                        </span>
-                    </div>
+                    <!-- MESSAGES FILL UP HERE -->
                 </div>
                 <div id="new-message">
                     <input type="text" id="new-message-text"
