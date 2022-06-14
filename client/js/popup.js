@@ -16,8 +16,10 @@ function retrieveMessages() {
         if (this.readyState == 4 && this.status == 200) {
             var parser = new DOMParser();
             var responseDom = parser.parseFromString(this.responseText, "text/html");
-
-            updateMessages(responseDom.getElementById('messages'));
+            var retrievedMessages = responseDom.getElementById('messages');
+            
+            if(foundUpdations(retrievedMessages.childElementCount))
+                updateMessages(retrievedMessages);
         }
     };
 
@@ -25,6 +27,16 @@ function retrieveMessages() {
     var url = "https://ghost-in-the-heap.000webhostapp.com/Messenger/server/php/fetch_messages.php?"+urlParameters;
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
+}
+
+
+function foundUpdations(retrievedMessagesCount) {
+    var existingMessagesCount = document.getElementById('messages').childElementCount;
+    
+    if(retrievedMessagesCount == existingMessagesCount)
+        return false;
+    else
+        return true;
 }
 
 
