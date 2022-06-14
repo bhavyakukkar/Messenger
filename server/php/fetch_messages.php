@@ -113,8 +113,14 @@ function outputMessages($messages) {
 
     echo "<div id='messages'>";
     for($i = 0; $i < count($messages); $i++) {
+        
+        if($messages[$i]["d"] == "in")
+            $direction = "left";
+        elseif($messages[$i]["d"] == "out")
+            $direction = "right";
+        
         echo '<div class="message">';
-        echo '<p class="message left">'.$messages[$i]["message"].'</p>';
+        echo '<p class="message '.$direction.'">'.$messages[$i]["m"].'</p>';
         echo '</div>';
     }
     echo "</div>";

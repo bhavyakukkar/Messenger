@@ -63,7 +63,7 @@ function loginContact($user_key, $contact_id) {
 
     $path = $messaging_directory.$user_key."chats/".$contact_file_name;
 
-    //Scope to implement Friend Requests, right now creates chat triggered by first ever message
+    //Scope to implement Friend Requests, right now creates chat triggered by first ever message received by receiver
     //First Interaction Ever
     if(!file_exists($path)) {
 
@@ -117,7 +117,7 @@ function addContactToContactsList($user_key, $contact_id) {
     setArrayToJson($contacts_list, $path);
 }
 
-function addMessage($contact_key, $message) {
+function addMessage($contact_key, $direction, $message, $timestamp) {
     global $messaging_directory;
 
     $path = $messaging_directory.$contact_key;
@@ -129,8 +129,9 @@ function addMessage($contact_key, $message) {
     
     $updated_chat = $existing_chat;
     $updated_chat[$id] = Array (
-        "ID" => strval($id + 1),
-        "message" => $message
+        "t" => $timestamp,  //Timestamp
+        "m" => $message,    //Message
+        "d" => $direction   //Direction (Incoming/Outgoing)
     );
     setArrayToJson($updated_chat, $path);
 }
@@ -167,13 +168,29 @@ function isNewNotification($notifications, $contact_id) {
 
 //Main Method
 function sendMessage($sender_id, $receiver_id, $message) {
+    
+    $timestamp = (int)(time());
 
+    //Add message in receiver's chat with sender
     addMessage(
         loginContact(
             loginUser($receiver_id),
             $sender_id
         ),
-        $message
+        "in",
+        $message,
+        $timestamp
+    );
+
+    //Add message in sender's chat with receiver
+    addMessage(
+        loginContact(
+            loginUser($sender_id),
+            $receiver_id
+        ),
+        "out",
+        $message,
+        $timestamp
     );
 
     addNotification(
