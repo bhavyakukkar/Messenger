@@ -159,7 +159,7 @@ $response = array(
     0 => array(
         0 => "Messages successfully Retrieved",
         1 => "No problems occured",
-        2 => "Warning: Requestee and Contact have never "
+        2 => "Warning: Requestee and Contact have never conversed before"
     ),
 
     1 => array(
