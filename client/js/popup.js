@@ -47,6 +47,7 @@ function updateMessages(retrievedMessages) {
 
     chat.removeChild(messages);
     chat.insertBefore(retrievedMessages, document.getElementById("new-message"));
+    retrievedMessages.children[retrievedMessages.childElementCount-1].scrollIntoView();
 }
 
 
