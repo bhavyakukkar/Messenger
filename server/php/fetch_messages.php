@@ -199,7 +199,7 @@ if(!empty($_GET['for'])) {
                         //Requestee Password Key Match
                         if(passwordMatch($_GET['for'], $_GET['key'])) {
 
-                            fetchMessages($_GET['for'], $_GET['between'], $_GET['key']);
+                            fetchMessages($_GET['for'], $_GET['between']);
                             $code = array(0, 1);
                         }
                         else {
