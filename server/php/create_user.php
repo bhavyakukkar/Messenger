@@ -80,7 +80,7 @@ function createUser($user_id, $password) {
 
     //Make Password File
     $path = $messaging_directory.$user_id."/password.json";
-    setArrayToJson(array(hashPassword(hashPassword($password))), $path);
+    setArrayToJson(array(hashPassword($password)), $path);
 
     //Make Notifications File (empty)
     $path = $messaging_directory.$user_id."/notifications.json";
