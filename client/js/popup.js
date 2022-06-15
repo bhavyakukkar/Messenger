@@ -16,7 +16,6 @@ function foundUpdations(retrievedMessagesCount, elementId) {
 }
 
 function clean(message) {
-
     return message.replace('\n', '%0A');
 }
 
@@ -28,7 +27,7 @@ function init() {
     //Retrieve All Contacts & Add Buttons
     setInterval(function() {
         retrieveContacts();
-    }, 2000);
+    }, 800);
 }
 
 

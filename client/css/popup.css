@@ -122,7 +122,7 @@ span.right {
 
 textarea#new-message-text {
     resize: none;
-    height: 16px;
+    height: 15.6px;
     vertical-align: middle;
     font-family:"Times New Roman", Times, serif;
 }
