@@ -15,6 +15,11 @@ function foundUpdations(retrievedMessagesCount, elementId) {
         return true;
 }
 
+function clean(message) {
+
+    return message.replace('\n', '%0A');
+}
+
 
 
 //Main method
@@ -24,10 +29,6 @@ function init() {
     setInterval(function() {
         retrieveContacts();
     }, 2000);
-
-    /*setInterval(function() {
-        retrieveMessages();
-    }, 500);*/
 }
 
 
@@ -71,20 +72,27 @@ function addContactButtons(retrievedContacts) {
 
     retrievedContacts.childNodes.forEach(contact => {
         contact.addEventListener("click", function() {
-            
-            currentContactOpen = contact.innerText;
-            if(welcomeBoardOpen) {
-
-                setInterval(function() {
-                    retrieveMessages();
-                }, 300);
-                welcomeBoardOpen = false;
-            }
-            setTimeout(function() {
-                updateContactName();
-            }, 200);
+            activateContact(contact.innerText);
         });
     });
+}
+
+function activateContact(contact) {
+
+    currentContactOpen = contact;
+    if(welcomeBoardOpen) {
+
+        setInterval(function() {
+            retrieveMessages();
+        }, 350);
+        welcomeBoardOpen = false;
+        
+        addSendMessageButton();
+    }
+
+    setTimeout(function() {
+        updateContactName();
+    }, 200);
 }
 
 function updateContactName() {
@@ -122,6 +130,27 @@ function updateMessages(retrievedMessages) {
     chat.removeChild(existingMessages);
     chat.insertBefore(retrievedMessages, document.getElementById("new-message"));
     retrievedMessages.children[retrievedMessages.childElementCount-1].scrollIntoView();
+}
+
+
+
+function addSendMessageButton() {
+
+    var message = document.getElementById("new-message-text");
+    var button = document.getElementById("new-message-send");
+
+    button.addEventListener('click', function() {
+        
+        if(message.value) {
+            
+            var xmlhttp = new XMLHttpRequest();
+            var urlParameters = "message="+clean(message.value)+"&from="+username+"&to="+currentContactOpen+"&key="+password_hash;
+            var url = "https://ghost-in-the-heap.000webhostapp.com/Messenger/server/php/send_message.php?"+urlParameters;
+
+            xmlhttp.open("GET", url, true);
+            xmlhttp.send();
+        }
+    });
 }
 
 

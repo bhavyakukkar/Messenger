@@ -120,6 +120,13 @@ span.right {
     text-align: right;
 }
 
+textarea#new-message-text {
+    resize: none;
+    height: 16px;
+    vertical-align: middle;
+    font-family:"Times New Roman", Times, serif;
+}
+
 ::-webkit-scrollbar { width: 7px;}
 ::-webkit-scrollbar-track { background: #f1f1f1; }
 ::-webkit-scrollbar-thumb { background: #888; }
