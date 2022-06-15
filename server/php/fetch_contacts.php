@@ -25,10 +25,17 @@ $user_list_directory = "../../database/user-list.json";
 $salt = "1940261";
 
 
+//Database Info
+$db_username = "id17855657_messenger_db";
+$db_name = "id17855657_messenger";
+$db_password = "^J$^+aP0^s&kB)-3";
+
 
 //Getter and Setters for Database Access
 function getArrayFromJson($path) {
+    //global $db_username, $db_name, $db_password;
 
+    //$db = mysqli_connect("localhost", $db_username, $db_password, $db_name);
     return json_decode(file_get_contents($path), true);
 }
 
