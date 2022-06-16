@@ -244,7 +244,7 @@ function updateContacts(retrievedContacts) {
     var contacts = document.getElementById('contacts');
 
     contacts.removeChild(existingContacts);
-    contacts.appendChild(retrievedContacts);
+    contacts.insertBefore(retrievedContacts, document.getElementById("new-contact"));
 
     addContactButtons(retrievedContacts);
 }
