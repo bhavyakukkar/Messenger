@@ -123,12 +123,12 @@ if(!empty($_GET['username'])) {
             //Password Key Match
             if(passwordMatch($_GET['username'], $_GET['key'])) {
                 
-                echo "<div id='password-match'>1</div>";
+                //echo "<div id='password-match'>1</div>";
                 $code = array(0, 1);
             }
             else {
                 
-                echo "<div id='password-match'>0</div>";
+                //echo "<div id='password-match'>0</div>";
                 $code = array(2, 2);
             }
         }
@@ -144,7 +144,7 @@ else {
     $code = array(1, 1);
 }
 
-
+echo '<div id="login">'.($code[0] + $code[1]).'</div>';
 echo $response[$code[0]][0]." > ".$response[$code[0]][$code[1]];
 
 

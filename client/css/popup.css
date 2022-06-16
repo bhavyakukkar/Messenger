@@ -4,13 +4,73 @@ body {
     height: 310px;
     margin: 0px;
 }
+
+
+.screen {
+    width: 300px;
+    height: 300px;
+    border: solid 1px black;
+    margin: 5px;
+}
+#anon {
+    display: none;
+    text-align: center;
+    font-size: 18px;
+    background: #CCCCCC;
+}
+#login {
+    display: none;
+    z-index: 10;
+    text-align: center;
+    font-size: 16px;
+    background: white;
+}
+#register {
+    display: none;
+    z-index: 10;
+    text-align: center;
+    font-size: 16px;
+    background: white;
+}
 #main {
+    display: none;
     width: 300px;
     height: 300px;
     border: solid 1px black;
     margin: 5px;
     float: right;
+    font-size: 18px;
     background: white;
+}
+
+
+
+button {
+    background-color: #f2f2f2;
+    border: 1px solid #f8f9fa;
+    border-radius: 4px;
+    color: #3c4043;
+    cursor: pointer;
+    font-family: arial,sans-serif;
+    font-size: 14px;
+    height: 36px;
+    line-height: 27px;
+    min-width: 54px;
+    padding: 0 16px;
+    text-align: center;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: pre;
+}
+button:hover {
+    border-color: #dadce0;
+    box-shadow: rgba(0, 0, 0, .1) 0 1px 1px;
+    color: #202124;
+}
+button:focus {
+    border-color: #4285f4;
+    outline: none;
 }
 
 #contacts {
@@ -56,7 +116,7 @@ div#contact-name {
 
 div#messages {
     padding: 5px 3px;
-    height: 206px;
+    height: 192px;
     overflow: hidden;
     overflow-y: scroll;
 }
@@ -120,12 +180,29 @@ span.right {
     text-align: right;
 }
 
-textarea#new-message-text {
+textarea {
     resize: none;
     height: 15.6px;
     vertical-align: middle;
     font-family:"Times New Roman", Times, serif;
 }
+
+label {
+    position: relative;
+    left: -55px;
+    font-size: 13px;
+}
+
+.error {
+    background: #ffcccb;
+    color: #ff1d18;
+    padding: 5px;
+}
+
+span#login-username-error { display: none; }
+span#login-password-error { display: none; }
+span#register-username-error { display: none; }
+
 
 ::-webkit-scrollbar { width: 7px;}
 ::-webkit-scrollbar-track { background: #f1f1f1; }

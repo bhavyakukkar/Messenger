@@ -4,7 +4,7 @@
 Parameters: 
 
 username
-password
+key
 
 
 */
@@ -108,7 +108,7 @@ $response = array(
     1 => array(
         0 => "Parameter Error, User not Created",
         1 => "Username missing. Use parameter 'username'",
-        2 => "Password missing. Use parameter 'password'"
+        2 => "Password Key missing. Use parameter 'key'"
     ),
     2 => array(
         0 => "Existence Error, User not Created",
@@ -126,12 +126,12 @@ $response = array(
 if(!empty($_GET['username'])) {
 
     //Password Parameter
-    if(!empty($_GET['password'])) {
+    if(!empty($_GET['key'])) {
 
         //Username doesn't already exist
         if(!userExist($_GET['username'])) {
 
-            createUser($_GET['username'], $_GET['password']);
+            createUser($_GET['username'], $_GET['key']);
             addUserToUserList($_GET['username']);
             $code = array(0, 1);
         }
@@ -148,6 +148,7 @@ else {
 }
 
 
+echo '<div id="register">'.($code[0] + $code[1]).'</div>';
 echo $response[$code[0]][0]." > ".$response[$code[0]][$code[1]];
 
 

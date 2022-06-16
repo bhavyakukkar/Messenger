@@ -4,7 +4,42 @@
         <link rel="stylesheet" href="../css/popup.css">
     </head>
     <body>
-        <div id="main">
+        <div id="anon" class="screen">
+            <div style="position: relative; top: 100px;">
+                <button id="login-screen-button">Login using Existing Account</button><br>
+                <span style="display: block; font-size: 14px; margin-bottom: 4px;">or</span>
+                <button id="register-screen-button">Create New Account</button>
+            </div>
+        </div>
+
+        <div id="login" class="screen">
+            <div style="position: relative; top: 65px;">
+                <label>Username:</label><br>
+                <input type="text" id="login-username"><br><br>
+                
+                <label>Password:</label><br>
+                <input type="password" id="login-password"><br><br>
+                <button id="login-button">Login</button><br><br>
+
+                <span id="login-username-error" class="error">Username not found</span>
+                <span id="login-password-error" class="error">Incorrect Password</span>
+            </div>
+        </div>
+
+        <div id="register" class="screen">
+            <div style="position: relative; top: 65px;">
+                <label>Username:</label><br>
+                <input type="text" id="register-username"><br><br>
+                
+                <label>Password:</label><br>
+                <input type="password" id="register-password">br><br>
+                <button id="register-button">Register</button>
+
+                <span id="register-username-error" class="error">Username already exists</span>
+            </div>
+        </div>
+
+        <div id="main" class="screen">
             <div id="contacts">
                 <div id="contacts-list">
                     <!-- CONTACTS FILL UP HERE -->

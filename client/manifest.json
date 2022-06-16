@@ -10,5 +10,8 @@
     },
     "host_permissions": [
       "https://ghost-in-the-heap.000webhostapp.com/"
+    ],
+    "permissions":[
+      "storage"
     ]
   }
