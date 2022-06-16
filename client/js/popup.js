@@ -5,6 +5,8 @@ var welcomeBoardOpen = true;
 var currentContactOpen = "";
 
 var hostUrl = "https://ghost-in-the-heap.000webhostapp.com/";
+var storageUsernameIndex = "Messenger-Login-username";
+var storageKeyIndex = "Messenger-Login-key";
 
 
 
@@ -62,11 +64,15 @@ function main() {
 function checkLogin() {
     var storedUsername;
 
-    chrome.storage.sync.get('Messenger-Login-username', function(data) {
-        storedUsername = data['Messenger-Login-username'];
+    chrome.storage.sync.get(storageUsernameIndex, function(data) {
+        storedUsername = data[storageUsernameIndex];
         if(storedUsername) {
             username = storedUsername;
-            showScreen("main");
+            chrome.storage.sync.get(storageKeyIndex, function(data) {
+                storedPassword = data[storageKeyIndex];
+                password = storedPassword;
+                showScreen("main");
+            });
         }
         else {
             showScreen("anon");
@@ -113,8 +119,7 @@ function loginAttempt(loginUsername, loginPassword) {
             
             switch(requestedDom.innerText) {
                 case "1":
-                    username = loginUsername;
-                    key = loginKey;
+                    successfulLogin(loginUsername, loginKey);
                     hideScreen("login");
                     showScreen("main");
                     main();
@@ -136,6 +141,15 @@ function loginAttempt(loginUsername, loginPassword) {
     };
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
+}
+function successfulLogin(inputUsername, inputKey) {
+    console.log("ahoy"+inputUsername+" "+inputKey);
+    username = inputUsername;
+    key = inputKey;
+
+    chrome.storage.sync.set({"Messenger-Login-username": inputUsername}, function() {
+        chrome.storage.sync.set({"Messenger-Login-key": inputKey}, function() {});
+    });
 }
 
 
@@ -173,8 +187,7 @@ function registerAttempt(registerUsername, registerPassword) {
             
             switch(requestedDom.innerText) {
                 case "1":
-                    username = registerUsername;
-                    key = registerKey;
+                    successfulLogin(registerUsername, registerKey);
                     hideScreen("register");
                     hideScreen("anon");
                     showScreen("main");
@@ -193,21 +206,6 @@ function registerAttempt(registerUsername, registerPassword) {
     };
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
-}
-
-
-function addLogin() {
-    
-    var userdata = getFromInjectedScope("username").value;
-
-    var key = "Technoboard-Teacher-ATS-username",
-        value = userdata;
-    
-    var usernameJson = {};
-    usernameJson[key] = value;
-    chrome.storage.sync.set(usernameJson, function() {
-        //login added
-    });
 }
 
 function showScreen(elementId) {
