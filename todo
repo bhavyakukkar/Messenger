@@ -1,0 +1,13 @@
+Server:
+- (test on htdocs/test.php) after any message is sent, sender's and recipient's contacts-list.json updates to bring recipient and sender contacts, respectively, to the front of the list
+
+- fetch_notification.php that returns whether there is an unread message between specified user and contact
+- delete_notification.php that removes the presence of unread message
+
+
+Client:
+- use text-overflow: elipsis on div#contact-name so that it does not compress whilst no contact is selected on the welcome screen (https://stackoverflow.com/a/486571/15597840)
+- settings toolbar with option to sign out
+
+- option to change password
+- use smaller images (send message & new contact icons) and use them locally
