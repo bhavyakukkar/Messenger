@@ -2,6 +2,7 @@
     "manifest_version": 3,
   
     "name": "Messenger",
+    "author": "Bhavya Kukkar",
     "description": "This extension is a standalone messenging app",
     "version": "0.1.0",
   
