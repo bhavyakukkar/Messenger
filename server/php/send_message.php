@@ -13,7 +13,8 @@ message
 
 Comments:
 
-- 
+- Generic:  user vs contact
+- Specific: sender vs receiver
 
 
 */
@@ -136,6 +137,19 @@ function addMessage($contact_key, $direction, $message, $timestamp) {
     setArrayToJson($updated_chat, $path);
 }
 
+function moveContactToFrontOfContactsList($user_key, $contact_id) {
+    global $messaging_directory;
+
+    $path = $messaging_directory.$user_key."contacts.json";
+
+    $contacts_list = getArrayFromJson($path);
+
+    array_splice($contacts_list, array_search($contact_id, $contacts_list), 1);
+    array_unshift($contacts_list, $contact_id);
+
+    setArrayToJson($contacts_list, $path);
+}
+
 function addNotification($user_key, $contact_id) {
     global $messaging_directory;
 
@@ -171,28 +185,39 @@ function sendMessage($sender_id, $receiver_id, $message) {
     
     $timestamp = (int)(time());
 
+    $sender_key = loginUser($sender_id);
+    $receiver_key = loginUser($receiver_id);
+
+
     //Add message in receiver's chat with sender
     addMessage(
         loginContact(
-            loginUser($receiver_id),
+            $receiver_key,
             $sender_id
         ),
         "in",
         $message,
         $timestamp
     );
+    //Move sender's contact to front of receiver's contacts-list
+    moveContactToFrontOfContactsList($receiver_key, $sender_id);
 
+    
     //Add message in sender's chat with receiver
     addMessage(
         loginContact(
-            loginUser($sender_id),
+            $sender_key,
             $receiver_id
         ),
         "out",
         $message,
         $timestamp
     );
+    //Move receiver's contact to front of sender's contacts-list
+    moveContactToFrontOfContactsList($sender_key, $receiver_id);
 
+
+    //Add notification to receiver
     addNotification(
         loginUser($receiver_id),
         $sender_id
