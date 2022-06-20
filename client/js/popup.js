@@ -1,5 +1,5 @@
-var username = "pranav";
-var key = "a12619925a8e16d9a7a827d8ce6375aa";
+var username = "";
+var key = "";
 
 var welcomeBoardOpen = true;
 var currentContactOpen = "";
