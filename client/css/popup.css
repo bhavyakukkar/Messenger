@@ -32,8 +32,15 @@ body {
     font-size: 16px;
     background: white;
 }
+#new-contact {
+    display: none;
+    z-index: 10;
+    text-align: center;
+    font-size: 16px;
+    background: #CCCCCC;
+}
 #main {
-    display: block;
+    display: none;
     width: 300px;
     height: 300px;
     border: solid 1px black;
@@ -114,14 +121,14 @@ div#contact-name {
     text-align: center;
 }
 
-div#new-contact {
+div#new-contact-button {
     border: #BBBBBB 1px solid;
     background: #FAFAFA;
     border-radius: 4px;
     width: 50px;
     margin: 4px;
 }
-div#new-contact:hover {
+div#new-contact-button:hover {
     box-shadow: rgba(0, 0, 0, .1) 0 2px 2px;
     cursor: pointer;
 }

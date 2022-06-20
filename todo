@@ -1,3 +1,7 @@
+Config:
+- figure out why todo is not being gitignored
+
+
 Server:
 - (test on htdocs/test.php) after any message is sent, sender's and recipient's contacts-list.json updates to bring recipient and sender contacts, respectively, to the front of the list
 

@@ -33,9 +33,22 @@
                 
                 <label>Password:</label><br>
                 <input type="password" id="register-password"><br><br>
-                <button id="register-button">Register</button>
+                <button id="register-button">Register</button><br><br>
 
                 <span id="register-username-error" class="error">Username already exists</span>
+            </div>
+        </div>
+
+        <div id="new-contact" class="screen">
+            <div style="position: relative; top: 65px;">
+                <label>Username:</label><br>
+                <input type="text" id="search-username"><br><br>
+
+                <label>Message:</label><br>
+                <textarea id="search-message"></textarea><br><br>
+                <button id="search-button">Add Contact</button><br><br>
+
+                <span id="search-username-error" class="error">Username not found</span>
             </div>
         </div>
 
@@ -44,7 +57,7 @@
                 <div id="contacts-list">
                     <!-- CONTACTS FILL UP HERE -->
                 </div>
-                <div id="new-contact">
+                <div id="new-contact-button">
                     New Contact
                     <img width="20px" style="line-height: 0%;"
                     src="https://petersanders.com/wp-content/uploads/2021/04/free-png-plus-sign-transparent-plus-signpng-images-pluspng-plus-sign-transparent-background-512_512.png">
