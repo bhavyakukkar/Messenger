@@ -121,16 +121,10 @@ if(!empty($_GET['username'])) {
         if(userExist($_GET['username'])) {
 
             //Password Key Match
-            if(passwordMatch($_GET['username'], $_GET['key'])) {
-                
-                //echo "<div id='password-match'>1</div>";
+            if(passwordMatch($_GET['username'], $_GET['key']))
                 $code = array(0, 1);
-            }
-            else {
-                
-                //echo "<div id='password-match'>0</div>";
+            else
                 $code = array(2, 2);
-            }
         }
         else {
             $code = array(2, 1);
