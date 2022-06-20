@@ -7,7 +7,9 @@ Server:
 
 Client:
 - use text-overflow: elipsis on div#contact-name so that it does not compress whilst no contact is selected on the welcome screen (https://stackoverflow.com/a/486571/15597840)
+- Login/Register/New Contact headings in respective screens
 - settings toolbar with option to sign out
 
+- every user can enable or disable incoming requests (adds error-case in new-contact where requested user has disabled requests)
 - option to change password
 - use smaller images (send message & new contact icons) and use them locally
