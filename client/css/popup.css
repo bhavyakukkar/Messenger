@@ -13,34 +13,34 @@ body {
     margin: 5px;
 }
 #anon {
-    display: none;
+    display: block;
     text-align: center;
     font-size: 18px;
     background: #CCCCCC;
 }
 #login {
-    display: none;
+    display: block;
     z-index: 10;
     text-align: center;
     font-size: 16px;
     background: white;
 }
 #register {
-    display: none;
+    display: block;
     z-index: 10;
     text-align: center;
     font-size: 16px;
     background: white;
 }
 #new-contact {
-    display: none;
+    display: block;
     z-index: 10;
     text-align: center;
     font-size: 16px;
     background: #CCCCCC;
 }
 #main {
-    display: none;
+    display: block;
     width: 300px;
     height: 300px;
     border: solid 1px black;
@@ -119,6 +119,7 @@ div#contact-name {
     border-bottom: 0.5px solid black;
     margin: 0px;
     text-align: center;
+    text-overflow: ellipsis;
 }
 
 div#new-contact-button {
@@ -208,7 +209,7 @@ textarea {
 
 label {
     position: relative;
-    left: -55px;
+    left: -64px;
     font-size: 13px;
 }
 
@@ -221,6 +222,7 @@ label {
 span#login-username-error { display: none; }
 span#login-password-error { display: none; }
 span#register-username-error { display: none; }
+span#search-username-error { display: none; }
 
 
 ::-webkit-scrollbar { width: 7px;}
