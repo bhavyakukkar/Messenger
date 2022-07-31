@@ -37,7 +37,7 @@ function sendMessage(senderId, receiverId, message, sendKey) {
 
     var xmlhttp = new XMLHttpRequest();
     var urlParameters = "?message="+message+"&from="+senderId+"&to="+receiverId+"&key="+sendKey;
-    var url = hostUrl+"Messenger/server/php/send_message.php"+urlParameters;
+    var url = hostUrl+"Messenger-1940261/server/php/send_message.php"+urlParameters;
 
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
@@ -110,7 +110,7 @@ function addLoginButton() {
 function loginAttempt(loginUsername, loginPassword) {
     var loginKey = hash(loginPassword);
     var urlParameters = "?username="+loginUsername+"&key="+loginKey;
-    var url = hostUrl+"Messenger/server/php/login_user.php"+urlParameters;
+    var url = hostUrl+"Messenger-1940261/server/php/login_user.php"+urlParameters;
     
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
@@ -178,7 +178,7 @@ function addRegisterButton() {
 function registerAttempt(registerUsername, registerPassword) {
     var registerKey = hash(registerPassword);
     var urlParameters = "?username="+registerUsername+"&key="+registerKey;
-    var url = hostUrl+"Messenger/server/php/create_user.php"+urlParameters;
+    var url = hostUrl+"Messenger-1940261/server/php/create_user.php"+urlParameters;
 
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
@@ -235,7 +235,7 @@ function retrieveContacts() {
     };
 
     var urlParameters = "?of="+username+"&key="+key;
-    var url = hostUrl+"Messenger/server/php/fetch_contacts.php"+urlParameters;
+    var url = hostUrl+"Messenger-1940261/server/php/fetch_contacts.php"+urlParameters;
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
 }
@@ -276,7 +276,7 @@ function addNewContactButton() {
 function searchAttempt(searchUsername, searchMessage) {
 
     var urlParameters = "?username="+searchUsername;
-    var url = hostUrl+"Messenger/server/php/user_exist.php"+urlParameters;
+    var url = hostUrl+"Messenger-1940261/server/php/user_exist.php"+urlParameters;
     lastNewContactUsername = searchUsername;
     lastNewContactMessage = searchMessage;
     
@@ -360,7 +360,7 @@ function retrieveMessages() {
     };
 
     var urlParameters = "?for="+username+"&between="+currentContactOpen+"&key="+key;
-    var url = hostUrl+"Messenger/server/php/fetch_messages.php"+urlParameters;
+    var url = hostUrl+"Messenger-1940261/server/php/fetch_messages.php"+urlParameters;
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
 }
@@ -389,7 +389,7 @@ function addSendMessageButton() {
             sendMessage(username, currentContactOpen, clean(message.value), key);
             /*var xmlhttp = new XMLHttpRequest();
             var urlParameters = "?message="+clean(message.value)+"&from="+username+"&to="+currentContactOpen+"&key="+key;
-            var url = hostUrl+"Messenger/server/php/send_message.php"+urlParameters;
+            var url = hostUrl+"Messenger-1940261/server/php/send_message.php"+urlParameters;
 
             xmlhttp.open("GET", url, true);
             xmlhttp.send();*/
