@@ -1,18 +1,18 @@
 {
     "manifest_version": 3,
-  
+
     "name": "Messenger",
     "author": "Bhavya Kukkar",
     "description": "This extension is a standalone messenging app",
     "version": "0.1.0",
-  
+
     "action": {
-      "default_popup": "html/popup.html"
+        "default_popup": "html/popup.html"
     },
     "host_permissions": [
-      "https://ghost-in-the-heap.000webhostapp.com/"
+        "https://ghost-in-the-heap.000webhostapp.com/"
     ],
     "permissions":[
-      "storage"
+        "storage"
     ]
-  }
+}
