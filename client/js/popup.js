@@ -385,14 +385,8 @@ function addSendMessageButton() {
     button.addEventListener('click', function() {
         
         if(message.value) {
-            
             sendMessage(username, currentContactOpen, clean(message.value), key);
-            /*var xmlhttp = new XMLHttpRequest();
-            var urlParameters = "?message="+clean(message.value)+"&from="+username+"&to="+currentContactOpen+"&key="+key;
-            var url = hostUrl+"server/php/send_message.php"+urlParameters;
-
-            xmlhttp.open("GET", url, true);
-            xmlhttp.send();*/
+            message.value = "";
         }
     });
 }
